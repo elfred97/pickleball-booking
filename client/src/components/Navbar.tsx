@@ -1,8 +1,8 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation } from "react-router-dom";
 
 export default function Navbar() {
   const location = useLocation();
-  const isAdmin = location.pathname.startsWith('/admin');
+  const isAdmin = location.pathname.startsWith("/admin");
 
   if (isAdmin) return null;
 
@@ -10,7 +10,7 @@ export default function Navbar() {
     <nav className="bg-court-700 text-white shadow-lg">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
         <Link to="/" className="flex items-center gap-2 text-xl font-bold">
-          <span className="text-2xl">🏓</span>
+          <span className="text-2xl">Elfred's</span>
           Pickleball Courts
         </Link>
         <div className="flex items-center gap-6">
@@ -20,7 +20,10 @@ export default function Navbar() {
           <Link to="/book" className="hover:text-court-100 transition-colors">
             Book a Court
           </Link>
-          <Link to="/my-bookings" className="hover:text-court-100 transition-colors">
+          <Link
+            to="/my-bookings"
+            className="hover:text-court-100 transition-colors"
+          >
             My Bookings
           </Link>
           <Link
