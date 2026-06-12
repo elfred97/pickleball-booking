@@ -1,6 +1,6 @@
-import { useState, useEffect, FormEvent } from 'react';
-import { api } from '../api/client';
-import type { Court, TimeSlot } from '../types';
+import { useState, useEffect, FormEvent } from "react";
+import { api } from "../api/client";
+import type { Court, TimeSlot } from "../types";
 
 interface BookingFormProps {
   courts: Court[];
@@ -11,39 +11,61 @@ interface BookingFormProps {
 
 const TIME_OPTIONS = Array.from({ length: 17 }, (_, i) => {
   const hour = i + 6;
-  return `${hour.toString().padStart(2, '0')}:00`;
+  return `${hour.toString().padStart(2, "0")}:00`;
 });
 
 export default function BookingForm({
   courts,
   onSubmit,
-  submitLabel = 'Book Court',
+  submitLabel = "Book Court",
   defaultValues = {},
 }: BookingFormProps) {
-  const [courtId, setCourtId] = useState(defaultValues.courtId || '');
-  const [date, setDate] = useState(defaultValues.date || '');
-  const [startTime, setStartTime] = useState(defaultValues.startTime || '08:00');
-  const [endTime, setEndTime] = useState(defaultValues.endTime || '09:00');
-  const [customerName, setCustomerName] = useState(defaultValues.customerName || '');
-  const [customerEmail, setCustomerEmail] = useState(defaultValues.customerEmail || '');
-  const [customerPhone, setCustomerPhone] = useState(defaultValues.customerPhone || '');
+  const [courtId, setCourtId] = useState(defaultValues.courtId || "");
+  const [date, setDate] = useState(defaultValues.date || "");
+  const [startTime, setStartTime] = useState(
+    defaultValues.startTime || "08:00",
+  );
+  const [endTime, setEndTime] = useState(defaultValues.endTime || "09:00");
+  const [customerName, setCustomerName] = useState(
+    defaultValues.customerName || "",
+  );
+  const [customerEmail, setCustomerEmail] = useState(
+    defaultValues.customerEmail || "",
+  );
+  const [customerPhone, setCustomerPhone] = useState(
+    defaultValues.customerPhone || "",
+  );
   const [bookedSlots, setBookedSlots] = useState<TimeSlot[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
-  const startHour = parseInt(startTime.split(':')[0], 10);
-  const endHour = parseInt(endTime.split(':')[0], 10);
+  const startHour = parseInt(startTime.split(":")[0], 10);
+  const endHour = parseInt(endTime.split(":")[0], 10);
   const hours = Math.max(0, endHour - startHour);
   const totalCost = hours * 300;
 
+  const handleSelect = (field: string, value: string) => {
+    if (field === "startTime") {
+      setStartTime(value);
+      if (value >= endTime) {
+        setEndTime(TIME_OPTIONS.find((t) => t > value) || value);
+      }
+    } else {
+      setEndTime(value);
+    }
+  };
+
   useEffect(() => {
     if (!courtId || !date) return;
-    api.getAvailability(date, courtId).then(setBookedSlots).catch(() => setBookedSlots([]));
+    api
+      .getAvailability(date, courtId)
+      .then(setBookedSlots)
+      .catch(() => setBookedSlots([]));
   }, [courtId, date]);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    setError('');
+    setError("");
     setLoading(true);
     try {
       await onSubmit({
@@ -56,13 +78,13 @@ export default function BookingForm({
         customerPhone,
       });
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Booking failed');
+      setError(err instanceof Error ? err.message : "Booking failed");
     } finally {
       setLoading(false);
     }
   }
 
-  const today = new Date().toISOString().split('T')[0];
+  const today = new Date().toISOString().split("T")[0];
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
@@ -74,7 +96,9 @@ export default function BookingForm({
 
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700">Court</label>
+          <label className="mb-1 block text-sm font-medium text-gray-700">
+            Court
+          </label>
           <select
             value={courtId}
             onChange={(e) => setCourtId(e.target.value)}
@@ -91,7 +115,9 @@ export default function BookingForm({
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700">Date</label>
+          <label className="mb-1 block text-sm font-medium text-gray-700">
+            Date
+          </label>
           <input
             type="date"
             value={date}
@@ -103,10 +129,12 @@ export default function BookingForm({
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700">Start Time</label>
+          <label className="mb-1 block text-sm font-medium text-gray-700">
+            Start Time
+          </label>
           <select
             value={startTime}
-            onChange={(e) => setStartTime(e.target.value)}
+            onChange={(e) => handleSelect("startTime", e.target.value)}
             required
             className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-court-500 focus:ring-1 focus:ring-court-500 outline-none"
           >
@@ -119,10 +147,12 @@ export default function BookingForm({
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700">End Time</label>
+          <label className="mb-1 block text-sm font-medium text-gray-700">
+            End Time
+          </label>
           <select
             value={endTime}
-            onChange={(e) => setEndTime(e.target.value)}
+            onChange={(e) => handleSelect("endTime", e.target.value)}
             required
             className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-court-500 focus:ring-1 focus:ring-court-500 outline-none"
           >
@@ -135,7 +165,9 @@ export default function BookingForm({
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700">Full Name</label>
+          <label className="mb-1 block text-sm font-medium text-gray-700">
+            Full Name
+          </label>
           <input
             type="text"
             value={customerName}
@@ -146,7 +178,9 @@ export default function BookingForm({
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700">Email</label>
+          <label className="mb-1 block text-sm font-medium text-gray-700">
+            Email
+          </label>
           <input
             type="email"
             value={customerEmail}
@@ -157,7 +191,9 @@ export default function BookingForm({
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700">Phone (optional)</label>
+          <label className="mb-1 block text-sm font-medium text-gray-700">
+            Phone (optional)
+          </label>
           <input
             type="tel"
             value={customerPhone}
@@ -182,7 +218,9 @@ export default function BookingForm({
 
       <div className="rounded-lg bg-court-50 border border-court-200 px-4 py-3 flex justify-between items-center">
         <span className="text-court-800 font-medium">Estimated Total</span>
-        <span className="text-2xl font-bold text-court-700">₱{totalCost.toLocaleString()}</span>
+        <span className="text-2xl font-bold text-court-700">
+          ₱{totalCost.toLocaleString()}
+        </span>
       </div>
 
       <button
@@ -190,7 +228,7 @@ export default function BookingForm({
         disabled={loading}
         className="w-full rounded-lg bg-court-600 px-6 py-3 font-semibold text-white hover:bg-court-700 disabled:opacity-50 transition-colors"
       >
-        {loading ? 'Processing...' : submitLabel}
+        {loading ? "Processing..." : submitLabel}
       </button>
     </form>
   );
