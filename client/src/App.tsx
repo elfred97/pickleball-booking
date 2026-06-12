@@ -1,15 +1,15 @@
-import { Routes, Route } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import AdminLayout from './components/AdminLayout';
-import AdminRoute from './components/AdminRoute';
-import Home from './pages/Home';
-import BookCourt from './pages/BookCourt';
-import MyBookings from './pages/MyBookings';
-import AdminLogin from './pages/admin/Login';
-import Dashboard from './pages/admin/Dashboard';
-import ManualBooking from './pages/admin/ManualBooking';
-import AdminBookings from './pages/admin/AdminBookings';
-import Courts from './pages/admin/Courts';
+import { Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import AdminLayout from "./components/AdminLayout";
+import AdminRoute from "./components/AdminRoute";
+import Home from "./pages/Home";
+import BookCourt from "./pages/BookCourt";
+import MyBookings from "./pages/MyBookings";
+import AdminLogin from "./pages/admin/Login";
+import Dashboard from "./pages/admin/Dashboard";
+import ManualBooking from "./pages/admin/ManualBooking";
+import AdminBookings from "./pages/admin/AdminBookings";
+import Courts from "./pages/admin/Courts";
 
 export default function App() {
   return (
