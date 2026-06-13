@@ -1,4 +1,4 @@
-const API_BASE = '/api';
+const API_BASE = 'https://pickleball-booking-swll.onrender.com/api';
 
 function getAuthHeaders(): HeadersInit {
   const token = localStorage.getItem('adminToken');
